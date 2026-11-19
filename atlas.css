@@ -701,3 +701,22 @@ main{padding:20px clamp(32px,4vw,104px) 36px}
 #specimen .sp-glyphs figcaption{font-size:11px;line-height:1.5;color:#a6aba8;margin-top:5px}
 
 #grid:is([data-display="wings"],[data-display="mosaic"],[data-display="pie"]) .tile[data-missing-shares="true"]::before{content:"—";position:absolute;inset:0;display:grid;place-items:center;color:var(--muted)}
+
+/* Bird names stay with their palettes throughout the three taxonomy views. */
+#grid.labelledGrid .tile { grid-template-rows:minmax(0,1fr) 28px; row-gap:4px; }
+#grid.labelledGrid .tile i { grid-row:1; min-height:0; }
+#grid.labelledGrid .tile .tileName {
+  display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2;
+  grid-column:1/-1; grid-row:2; align-self:start; width:100%;
+  margin:0; padding:0 2px; color:var(--muted); text-align:center;
+  white-space:normal; overflow:hidden; overflow-wrap:anywhere;
+  font:11px/14px "Segoe UI","Microsoft YaHei UI","PingFang SC",sans-serif;
+}
+#grid.labelledGrid .tile.dim .tileName { opacity:.35; }
+#grid.labelledGrid .tile:focus-visible .tileName { color:var(--ink); text-decoration:underline; text-underline-offset:3px; }
+#grid.labelledGrid .tile:enabled:hover .tileName { color:var(--ink); }
+#grid.labelledGrid.levelGrid .groupName { align-self:flex-start; padding:2px 0; }
+#grid.labelledGrid.levelGrid .groupName:focus-visible { outline:2px solid var(--muted); outline-offset:4px; }
+#grid.labelledGrid.levelGrid:not(.zoomLevels) .orderTiles { gap:8px; }
+#grid.labelledGrid.ribbonGrid .orderTiles { row-gap:12px; }
+.lang-en #grid.labelledGrid .tile .tileName { font-size:10px; }

@@ -20,7 +20,7 @@
   const label=row=>lang()==='en'?(row.en||I.taxon(row.name)):(row.zh||row.name);
   const btn=(text,fn,cls='exButton')=>{const n=el('button',cls,text);n.type='button';n.onclick=fn;return n;};
   function scopeGroup(){
-    if(['habitats','provinces'].includes(state.mode)&&customScope)return A().groups(state.mode).find(g=>g.key===customScope);
+    if(['habitats','provinces','levels'].includes(state.mode)&&customScope)return A().groups(state.mode).find(g=>g.key===customScope);
     if(state.mode==='families'&&state.family)return A().groups('families').find(g=>g.key===state.family);
     if(state.mode==='families'&&state.order)return A().groups('orders').find(g=>g.key===state.order);
     return null;
@@ -54,19 +54,37 @@
     const section=el('section','exDirectory');section.append(heading(tr('选择一个'+({orders:'目',families:'科',levels:'等级',habitats:'环境',provinces:'省级地区'}[type]||'分类'),'Explore '+({orders:'an order',families:'a family',levels:'a protection level',habitats:'a habitat',provinces:'a region'}[type]||'a group')),tr('点击名称进入该组的概览与图谱','Select a name to open its overview and atlas')));
     const list=el('div','exDirectoryGrid');groups.forEach((g,i)=>{const row=btn('',()=>navigate(type,g.key),'exDirectoryItem');const title=el('div','exDirectoryTitle');title.append(el('span','exIndex',String(i+1).padStart(2,'0')),el('strong','',name(g)),el('span','exSpeciesCount',g.summary.species+tr('种',' species')));row.append(title,barStack(g.summary.colorShares,'exMiniStack'));const desc=g.description?.[lang()];if(type==='habitats'&&desc)row.append(el('p','',desc));else row.append(el('small','',type==='provinces'?g.summary.orders+tr('目',' orders')+' · '+g.summary.families+tr('科',' families'):g.summary.families+tr('科',' families')+' · '+g.summary.provinces+tr('个省级地区有记录',' regions with records')));list.append(row);});section.append(list);return section;
   }
+  function overviewDescription(g,s){
+    const V=window.AtlasVisuals;
+    if(!g)return tr('中国的重点保护鸟类生活在森林、草原、湿地、高山与海岸，也有许多鸟种随季节迁徙。保护鸟类既关乎物种本身，也关乎它们觅食、繁殖和停歇的环境。这里汇集的 '+s.species+' 种鸟，展现了不同类群、生活环境与羽色的多样性。','China’s nationally protected birds inhabit forests, grasslands, wetlands, mountains and coasts. Many migrate with the seasons. Their conservation connects individual species with the places where they feed, breed and rest. The '+s.species+' birds represented here reveal a rich variety of families, habitats and colours.');
+    const examples=g.birds.slice(0,3).map(b=>I.birdName(b)).join(tr('、',', '));
+    if(g.type==='families')return V.familyIntro(g.key);
+    if(g.type==='orders')return tr(g.key+'将亲缘关系相近的科归在一起。这里的 '+s.species+' 种鸟分属 '+s.families+' 科，包括'+examples+'。'+(s.familyCounts[0]?'其中'+s.familyCounts[0].key+'的成员最多，共 '+s.familyCounts[0].count+' 种。':''),I.taxon(g.key)+' brings related families together. The '+s.species+' species shown here belong to '+s.families+' families, including '+examples+'.');
+    if(g.type==='habitats')return V.habitatText(g.key)+tr('这里可见 '+s.species+' 种鸟，分属 '+s.orders+' 目、'+s.families+' 科。',' Here, '+s.species+' species represent '+s.orders+' orders and '+s.families+' families.');
+    if(g.type==='provinces')return tr(g.key+'的鸟类记录连接着不同的生活环境。这里可见 '+s.species+' 种重点保护鸟类，包括'+examples+'，分属 '+s.orders+' 目、'+s.families+' 科。',name(g)+' brings together records from different habitats. The '+s.species+' protected birds shown here include '+examples+', spanning '+s.orders+' orders and '+s.families+' families.');
+    return tr('国家'+g.key+'保护是国家重点保护野生动物名录中的一个保护级别。这里有 '+s.species+' 种鸟，包括'+examples+'，它们的栖息地与生存状况都需要持续关注。',name(g)+' is a category in China’s national protected-wildlife list. The '+s.species+' birds shown here include '+examples+'. Protecting them also means caring for the habitats they depend on.');
+  }
+  function visualProtection(s){
+    const root=el('section','evProtection');root.append(heading(tr('保护等级','Protection levels'),tr('国家对珍贵、濒危的野生动物实行重点保护，分为一级和二级。','China’s national system gives key protection to rare and endangered wildlife through Class I and Class II.')));
+    const cards=el('div','evLevelCards');['一级','二级'].forEach((key,i)=>{const count=s.levelCounts[key]||0,b=btn('',()=>navigate('levels',key),'evLevelCard');b.disabled=!count;
+      const dial=el('span','evLevelDial');dial.style.setProperty('--portion',String(count/(s.species||1)*100)+'%');dial.append(el('strong','',count));const words=el('span','evLevelCopy');words.append(el('strong','',tr('国家'+key+'保护',i?'Class II protection':'Class I protection')),el('small','',tr(i?'同样受到国家重点保护，保护工作覆盖物种及其生存环境。':'一级保护对物种实行更严格的保护管理。',i?'National protection covers the birds and the places they depend on.':'Class I carries stricter protection requirements.')),el('span','evLevelShare',pct(count/(s.species||1))+tr(' · 查看鸟类 →',' · Explore birds →')));b.append(dial,words);cards.append(b);});root.append(cards);return root;
+  }
   function overview(){
-    panel.replaceChildren();const g=scopeGroup();if(!g&&state.mode!=='catalog'&&window.AtlasCategoryOverviews){panel.append(window.AtlasCategoryOverviews.render(state.mode,{navigate}),methods());return;}const list=g?g.birds:window.ATLAS.birds,s=g?g.summary:A().summarize(list);
-    if(g){const back=el('div','exScopeBack');back.append(btn(tr('← 返回分类图谱','← Back to grouped atlas'),()=>{customScope='';view='atlas';bridge.mode(g.type==='orders'?'orders':state.mode);},'exTextLink'));panel.append(back);}const intro=el('section','exIntro'),lead=el('div','exLead');lead.append(el('p','exKicker',tr('鸟色图谱 / 数据概览','BIRD COLOUR ATLAS / OVERVIEW')),el('h2','',titleText()));
-    lead.append(el('p','exDescription',g?g.description?.[lang()]||textSummary(s):copy[state.mode][lang()]));intro.append(lead,facts(s,g?.type==='provinces'));panel.append(intro);
-    const feature=el('div','exFeature'),insight=el('section','exInsight');insight.append(el('p','exKicker',tr('色彩观察','COLOUR OBSERVATION')),el('p','exObservation',textSummary(s)),metrics(s));feature.append(colourPanel(s),insight);panel.append(feature);
-    if(state.mode==='levels'){
-      const legal=el('section','exDefinition');legal.append(heading(tr('保护等级意味着什么','What the protection levels mean')),el('p','',tr('《野生动物保护法》第十条规定，对珍贵、濒危的野生动物实行重点保护，并将国家重点保护野生动物分为一级、二级。等级由依法公布的名录确定，不能仅从照片、配色或本图谱收录数量推断。','Article 10 of the Wildlife Protection Law establishes key protection for rare and endangered wildlife and two national protection levels. A bird’s level follows the officially published list; it cannot be inferred from its photograph, colours or the number of entries here.')));const refs=el('div','exReferences');refs.append(sourceLink(tr('2021年名录公告','2021 list announcement'),'https://www.forestry.gov.cn/c/www/gkzfwj/546057.jhtml'),sourceLink(tr('《野生动物保护法》第十条','Wildlife Protection Law, Article 10'),'https://www.mee.gov.cn/ywgz/fgbz/fl/202302/t20230220_1016885.shtml'));legal.append(refs);panel.append(legal);
-    }
-    const ecology=el('div','exEcologySummary'),hab=el('section');hab.append(heading(tr('生存环境','Habitats'),tr('鸟种数 / 当前组内鸟种数；类别可重叠','Species / species in this group; categories overlap')),countBars(s.habitatCounts,s.species,'habitats'));const province=el('section');province.append(heading(tr(g?.type==='provinces'?'这些鸟种的省份记录':'省份记录分布',g?.type==='provinces'?'Regions recorded for these birds':'Province records'),tr('展示记录数最高的8个地区；展开查看全部','Eight regions with the most records; expand for all')));const sorted=[...s.provinceCounts].sort((a,b)=>b.count-a.count);province.append(countBars(sorted.slice(0,8),s.species,'provinces'));const all=el('details','exMore');all.append(el('summary','',tr('全部省级地区记录','All province-level records')),countBars(sorted.slice(8),s.species,'provinces'));province.append(all);province.append(el('p','exCoverage',tr('已列省份记录：'+s.withProvince+'种；未明确到省份：'+s.withoutProvince+'种。','Province records available for '+s.withProvince+' birds; unspecified for '+s.withoutProvince+'.')));ecology.append(hab,province);panel.append(ecology,protectedPanel(s));
-    if(g?.type==='orders')panel.append(directory(A().groups('families').filter(f=>f.parent===g.key),'families'));
-    else if(!g&&state.mode!=='catalog')panel.append(directory(A().groups(kind(state.mode)),kind(state.mode)));
-    else if(!g){const entry=el('section','exBrowseDirections');entry.append(heading(tr('从不同角度继续观察','Choose a perspective')));const links=el('div','exPerspectiveLinks');['orders','families','levels','habitats','provinces'].forEach((type,i)=>{const b=btn('',()=>bridge.mode(type),'exPerspective');b.append(el('span','exIndex','0'+(i+1)),el('strong','',tr(...words[type])),el('span','',A().groups(type).length+tr('个分组 →',' groups →')));links.append(b);});entry.append(links);panel.append(entry);}
-    panel.append(methods());
+    panel.replaceChildren();const V=window.AtlasVisuals,g=scopeGroup();
+    if(!g&&state.mode!=='catalog'&&window.AtlasCategoryOverviews){panel.append(window.AtlasCategoryOverviews.render(state.mode,{navigate,openBird:bridge.open}));return;}
+    const birds=g?g.birds:window.ATLAS.birds,s=g?g.summary:A().summarize(birds),page=el('div','evPage');
+    if(g){const back=el('div','exScopeBack');back.append(btn(tr('← 返回分类图谱','← Back to grouped atlas'),()=>{customScope='';view='atlas';bridge.mode(g.type==='orders'?'orders':state.mode);},'exTextLink'));page.append(back);}
+    const intro=el('section','evIntro'),lead=el('div','evLead');lead.append(el('h2','',g?name(g):tr('中国重点保护鸟类','China’s protected birds')),el('p','',overviewDescription(g,s)));
+    if(g?.type==='habitats'){const art=V.habitatArt(g.key);art.classList.add('evHeroHabitat');lead.prepend(art);}
+    intro.append(lead,V.stats(s));page.append(intro);
+    const colour=el('section','evColour');colour.append(heading(tr('鸟色','Bird colours'),tr('沿色环查看各只鸟的原有配色，选择鸟名可查看对应的五色比例。','Explore the original palettes around the ring; choose a bird to see its five colour shares.')));
+    const feature=el('div','evColourFeature'),aside=el('div','evColourAside');aside.append(el('p','evColourObservation',tr('从浅色到深色，一只鸟的五种颜色共同构成它在图谱中的样子。组内不同鸟的配色在环上相接，保留各自的差异。','Five colours, from light to dark, form each bird’s palette. Individual palettes meet around the ring, preserving their differences.')),metrics(s),V.colourSummary(s));feature.append(V.paletteRing(birds,{onBird:bridge.open}),aside);colour.append(feature);page.append(colour);
+    const habitat=el('section','evHabitatSection');habitat.append(heading(tr('生存环境','Habitats'),tr('一只鸟可以使用多种环境。选择一幅景观，继续认识其中的鸟。','Birds may use several habitats. Select a landscape to discover its birds.')),V.habitatGrid(s,navigate));page.append(habitat);
+    const province=el('section','evProvinceSection');province.append(heading(tr(g?.type==='provinces'?'相连的省份记录':'省份记录',g?.type==='provinces'?'Connected province records':'Province records'),tr('圆的面积随记录鸟种数增加。点击省份，可继续浏览当地记录中的鸟类。','Circle area grows with the number of recorded species. Select a region to explore its birds.')),V.provinceGrid(s,navigate));page.append(province);
+    if(g?.type!=='levels')page.append(visualProtection(s));
+    if(g?.type==='orders'){const section=el('section','evFamilies');section.append(heading(tr('认识这些科','Explore the families'),tr('每一个色环，连接这个科里的鸟。','Each ring connects the birds in one family.')));const grid=el('div','evFamilyGrid');A().groups('families').filter(f=>f.parent===g.key).forEach(f=>grid.append(V.groupCard(f,navigate)));section.append(grid);page.append(section);}
+    if(!g){const entry=el('section','exBrowseDirections');entry.append(heading(tr('继续探索','Explore further')));const links=el('div','exPerspectiveLinks');['orders','families','levels','habitats','provinces'].forEach((type,i)=>{const b=btn('',()=>bridge.mode(type),'exPerspective');b.append(el('span','exIndex','0'+(i+1)),el('strong','',tr(...words[type])),el('span','',A().groups(type).length+tr('个分组 →',' groups →')));links.append(b);});entry.append(links);page.append(entry);}
+    panel.append(page);
   }
   function glyph(b){const mode=$('displaySwitch').value,pal=window.AtlasView.palette(b);if(mode==='tiles'){const n=el('div','exSwatches');pal.forEach(c=>{const x=el('span');x.style.background=c.hex;n.append(x);});return n;}return mode==='pie'?window.AtlasPie.draw(b,pal):window.AtlasShapes.draw(b,mode,pal);}
   function renderCustom(){
@@ -117,8 +135,8 @@
   }
   function filter(ids){allowed=ids;custom?.querySelectorAll('.exBird').forEach(b=>{b.disabled=!ids.has(Number(b.dataset.id));b.classList.toggle('dim',b.disabled);});}
   function navigate(type,key){
-    view='atlas';if(type==='habitats'||type==='provinces'){customScope=key;if(state.mode!==type)bridge.mode(type,true);else{render();bridge.layout();window.scrollTo(0,0);}}
-    else if(type==='orders')bridge.order(key);else if(type==='families')bridge.family(key);else if(type==='levels'){bridge.mode('levels');setView('atlas');}
+    view='atlas';if(['habitats','provinces','levels'].includes(type)){customScope=key;bridge.mode(type,true);}
+    else if(type==='orders')bridge.order(key);else if(type==='families')bridge.family(key);
   }
   let moving=false,motionSerial=0,activeAnimations=[];
   function cancelMotion(){
@@ -129,10 +147,10 @@
     if(next===view)return;
     cancelMotion();
     const vp=document.querySelector('.gridViewport'),rail=custom?.querySelector('.exGroupRail');
-    if(view==='atlas')atlasPosition={x:vp.scrollLeft,y:vp.scrollTop,rail:rail?.scrollLeft||0,page:window.scrollY};
+    if(view==='atlas')atlasPosition={x:vp.scrollLeft,y:vp.scrollTop,rail:rail?.scrollLeft||0,scopedY:custom?.querySelector('.exScopedFlock')?.scrollTop||0,page:window.scrollY};
     const serial=motionSerial,dir=next==='overview'?1:-1;
     const commit=()=>{view=next;render();window.scrollTo(0,0);bridge.layout();return new Promise(resolve=>requestAnimationFrame(()=>{
-      if(view==='atlas'){vp.scrollTo(atlasPosition.x,atlasPosition.y);custom?.querySelector('.exGroupRail')?.scrollTo(atlasPosition.rail,0);window.scrollTo(0,atlasPosition.page);}
+      if(view==='atlas'){vp.scrollTo(atlasPosition.x,atlasPosition.y);custom?.querySelector('.exGroupRail')?.scrollTo(atlasPosition.rail,0);custom?.querySelector('.exScopedFlock')?.scrollTo(0,atlasPosition.scopedY||0);window.scrollTo(0,atlasPosition.page);}
       resolve();
     }));};
     if(!animate||matchMedia('(prefers-reduced-motion: reduce)').matches){commit();return;}
@@ -149,7 +167,7 @@
     })();
   }
   function render(){
-    if(!bridge)return;const compare=state.mode==='compare';nav.hidden=compare;panel.hidden=compare||view!=='overview';custom.hidden=compare||view!=='atlas'||!['habitats','provinces'].includes(state.mode);
+    if(!bridge)return;const compare=state.mode==='compare';nav.hidden=compare;panel.hidden=compare||view!=='overview';custom.hidden=compare||view!=='atlas'||!(['habitats','provinces'].includes(state.mode)||(state.mode==='levels'&&customScope));
     const hidden=!compare&&(view==='overview'||!custom.hidden);document.querySelector('.catalog').hidden=hidden;
     document.body.classList.toggle('exOverview',!compare&&view==='overview');document.body.classList.toggle('exCustom',!custom.hidden);document.body.classList.toggle('exCompareGroups',compare&&state.comparisonMode!=='bird');
     $('ecologyFilters').hidden=true;
@@ -178,7 +196,7 @@
     const provinceRows=A().summarize(window.ATLAS.birds).provinceCounts;analysis.append(matrix(tr('全部省级地区记录','All province-level records'),provinceRows,groups,(r,g)=>{const d=g.summary.provinceCounts.find(x=>x.key===r.key);return {share:d?.share||0,text:(d?.count||0)+tr('种 · ',' species · ')+pct(d?.share||0)};},tr('组内有该地区记录的鸟种数与占比；不表示种群丰度','Species with a record in each region and their group share; not population abundance')));analysis.append(methods());
   }
 
-  let atlasPosition={x:0,y:0,rail:0,page:0},lastSwitch=-Infinity,lastWheel=0,wheelTotal=0,touchStart=null;
+  let atlasPosition={x:0,y:0,rail:0,scopedY:0,page:0},lastSwitch=-Infinity,lastWheel=0,wheelTotal=0,touchStart=null;
   function scrollable(target,delta){
     for(let n=target instanceof Element?target:null;n&&n!==document.body;n=n.parentElement){
       const style=getComputedStyle(n);
@@ -219,9 +237,9 @@
   }
   window.AtlasExplorer={
     init(callbacks){bridge=callbacks;const catalog=document.querySelector('.catalog');nav=el('nav','exNav');nav.id='explorerNav';panel=el('div','exPanel');panel.id='analysisPanel';custom=el('div','exCustomAtlas');custom.id='ecologyAtlas';analysis=el('div','exComparisonAnalysis');analysis.id='groupComparisonAnalysis';catalog.before(nav,$('pinned'),panel,custom);catalog.append(analysis);analysis.hidden=true;installGestures();},
-    update(next){const newSignature=[next.mode,next.mode==='families'?next.order:'',next.mode==='families'?next.family:''].join('|');if(signature!==newSignature){cancelMotion();if(next.mode!=='compare'&&state.mode!=='compare')view='atlas';if(next.mode!==state.mode&&!['habitats','provinces'].includes(next.mode))customScope='';signature=newSignature;}if(next.selecting)view='atlas';state=next;render();},
+    update(next){const newSignature=[next.mode,next.mode==='families'?next.order:'',next.mode==='families'?next.family:''].join('|');if(signature!==newSignature){cancelMotion();if(next.mode!=='compare'&&state.mode!=='compare')view='atlas';if(next.mode!==state.mode&&!['habitats','provinces','levels'].includes(next.mode))customScope='';signature=newSignature;}if(next.selecting)view='atlas';state=next;render();},
     filter, setView, navigate,
-    pool(mode){return ['habitats','provinces'].includes(mode)&&customScope?A().groups(mode).find(g=>g.key===customScope)?.birds||window.ATLAS.birds:window.ATLAS.birds;},
+    pool(mode){return ['habitats','provinces','levels'].includes(mode)&&customScope?A().groups(mode).find(g=>g.key===customScope)?.birds||window.ATLAS.birds:window.ATLAS.birds;},
     reset(){cancelMotion();customScope='';signature='';view='atlas';},
     resetScope(){customScope='';},
     selectPartner(){setView('atlas');},

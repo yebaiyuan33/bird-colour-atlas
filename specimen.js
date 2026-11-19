@@ -17,7 +17,7 @@
       '<div class="sp-empty" hidden></div><section class="sp-content sp-redesigned">',
       '<header class="sp-identity"><div class="sp-header"><h2></h2><span class="sp-number"></span></div><p class="sp-latin" lang="la"></p><div class="sp-taxon"><span></span><span></span></div></header>',
       '<div class="sp-media"><figure class="sp-photo"><div class="sp-plate"><canvas role="img"></canvas><span class="sp-status" aria-live="polite" hidden></span></div></figure>',
-      '<div class="sp-views" role="group"></div><section class="sp-intro"><h3></h3><p></p></section></div>',
+      '<div class="sp-views" role="group"></div><section class="sp-intro"><h3></h3><p></p></section><dl class="sp-population"></dl><section class="sp-family" hidden><h3></h3><p></p></section></div>',
       '<div class="sp-notes"><section class="sp-palette-panel"><div class="sp-section-head"><h3></h3><span></span></div>',
       '<div class="sp-chart-stage"><div class="sp-glyphs"></div>',
       '<div class="sp-chart-readout" aria-live="polite" aria-atomic="true"></div></div>',
@@ -26,7 +26,7 @@
       '<div class="sp-provenance"></div></section>'
     ].join("");
     const q=s=>host.querySelector(s);
-    ui={name:q("h2"),number:q(".sp-number"),latin:q(".sp-latin"),taxon:q(".sp-taxon"),frame:q(".sp-photo"),plate:q(".sp-plate"),canvas:q("canvas"),status:q(".sp-status"),glyphs:q(".sp-glyphs"),views:q(".sp-views"),swatches:q(".sp-swatches"),pin:q(".sp-pin"),ecology:q(".sp-ecology"),intro:q(".sp-intro p"),introTitle:q(".sp-intro h3"),empty:q(".sp-empty"),content:q(".sp-content"),colorHint:q(".sp-section-head span"),provenance:q(".sp-provenance"),readout:q(".sp-chart-readout")};
+    ui={name:q("h2"),number:q(".sp-number"),latin:q(".sp-latin"),taxon:q(".sp-taxon"),frame:q(".sp-photo"),plate:q(".sp-plate"),canvas:q("canvas"),status:q(".sp-status"),glyphs:q(".sp-glyphs"),views:q(".sp-views"),swatches:q(".sp-swatches"),pin:q(".sp-pin"),ecology:q(".sp-ecology"),intro:q(".sp-intro p"),introTitle:q(".sp-intro h3"),population:q(".sp-population"),empty:q(".sp-empty"),content:q(".sp-content"),colorHint:q(".sp-section-head span"),provenance:q(".sp-provenance"),readout:q(".sp-chart-readout")};
     modes.forEach((name,i)=>ui.views.append(button("",t(name),()=>{view=i;selected=null;preview=null;paintControls();schedulePaint();})));
     ui.pin.onclick=()=>{if(callback&&bird)callback(bird);};
     if(typeof ResizeObserver==="function"){observer=new ResizeObserver(schedulePaint);observer.observe(ui.plate);}else window.addEventListener("resize",schedulePaint);
@@ -52,10 +52,34 @@
       ui.swatches.append(chip);
     });
     const bio=window.BIRD_INTROS?.[bird.id];ui.intro.textContent=bio?.[I.language()]||t("introPending");ui.introTitle.textContent=t("introduction");
+    renderPopulation();
+    const family=host.querySelector(".sp-family"),familyIntro=window.AtlasVisuals?.familyIntro?.(bird.fam);
+    family.hidden=!familyIntro;
+    if(familyIntro){family.querySelector("h3").textContent=text("所属科 · ","Family · ")+I.taxon(bird.fam);family.querySelector("p").textContent=familyIntro;}
     translateLabels();renderChart();ui.provenance.replaceChildren(window.AtlasEcology.renderSources(bird,{inline:true}));
     ui.pin.querySelector("span").textContent=text("与另一鸟种对照","Compare with another bird");
     ui.ecology.replaceChildren(window.AtlasEcology.render(bird,{full:true,concise:true}));paintControls();
     ui.canvas.getContext("2d").clearRect(0,0,ui.canvas.width,ui.canvas.height);schedulePaint();
+  }
+  function renderPopulation(){
+    const record=window.ATLAS_POPULATION?.byId?.[bird.id];
+    const english={"未知（官方）":"Unknown (official)","未提供（官方）":"Not provided (official)","待核对":"Pending verification","减少":"Decreasing","增加":"Increasing","稳定":"Stable","未知":"Unknown"};
+    const categories={LC:"Least Concern",NT:"Near Threatened",VU:"Vulnerable",EN:"Endangered",CR:"Critically Endangered",DD:"Data Deficient"};
+    const fields=[
+      ["mature",text("全球成熟个体数量（只）","Global mature individuals")],
+      ["trend",text("全球种群趋势","Global population trend")],
+      ["iucn",text("IUCN全球等级","Global IUCN status")]
+    ];
+    ui.population.replaceChildren();
+    fields.forEach(([key,label])=>{
+      const cell=el("div","sp-population-item sp-population-"+key),raw=record?.[key];
+      let value=raw||text("暂无数据","Not available");
+      if(I.language()==="en"&&raw){
+        const code=key==="iucn"?raw.match(/\b(LC|NT|VU|EN|CR|DD)\b/)?.[0]:null;
+        value=code?code+" · "+categories[code]:(english[raw]||raw);
+      }
+      cell.append(el("dt","",label),el("dd","",value));ui.population.append(cell);
+    });
   }
   function renderChart(){
     ui.glyphs.replaceChildren();

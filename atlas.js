@@ -61,41 +61,21 @@
     return best;
   }
   function ribbonMetrics() {
-    if (shapesShown() || activeMode === "orders") {
-      const wings = shapesShown();
-      const height = wings ? Math.max(40, Math.min(62, viewport.clientWidth / 26)) : 30;
-      const gap = wings ? 12 : 8;
-      const rows = Math.max(1, Math.min(wings ? 12 : 22, Math.floor((viewport.clientHeight-150+gap)/(height+gap))));
-      const width = wings ? height : Math.max(84, Math.min(116, viewport.clientWidth/17));
-      return {rows,width,height};
-    }
-    const rows=Math.max(1,Math.ceil(Math.max(...currentGroups.map(g=>g.birds.length))/2));
-    const width=Math.max(48,Math.min(100,(viewport.clientWidth-240)/21));
-    const height=Math.max(4,Math.min(26,Math.floor((viewport.clientHeight-145-(rows-1)*4)/rows)));
-    return {height,width,rows};
+    const wings = shapesShown(), english = I.language() === "en";
+    const glyphHeight = wings ? Math.max(38,Math.min(58,viewport.clientWidth/26)) : 24;
+    const height = glyphHeight + 32, gap = wings ? 12 : 8;
+    const width = Math.max(english ? 108 : 82, Math.min(english ? 124 : 96,viewport.clientWidth/17));
+    const rows = Math.max(1,Math.min(12,Math.floor((viewport.clientHeight-150+gap)/(height+gap))));
+    return {rows,width,height};
   }
   let levelZoom = false;
   function levelMetrics(){
-    if (shapesShown() && !levelZoom) {
-      const width = Math.max(48,(viewport.clientWidth-32)/2);
-      const height = Math.max(100,viewport.clientHeight-74);
-      const fit = wingGrid(width,height, Math.max(1,...currentGroups.map(g=>g.birds.length)),5);
-      const lanes = Math.min(fit.columns, Math.max(1, Math.floor((width+5)/29)));
-      return {lanes,height:Math.max(24,Math.floor(fit.size))};
-    }
-    if (levelZoom) {
-      const lanes = viewport.clientWidth >= 1150 ? 6 : 5;
-      if (shapesShown()) {
-        const pane = innerWidth <= 720 ? viewport.clientWidth : (viewport.clientWidth-28)/2;
-        return {lanes, height:Math.min(140,Math.floor((pane-25-(lanes-1)*8)/lanes))};
-      }
-      return {lanes, height:Math.max(36, Math.min(110, Math.floor(viewport.clientWidth / (lanes * 3.2))))};
-    }
-    const width=Math.max(80,(viewport.clientWidth-28)/2), height=Math.max(160,viewport.clientHeight-70);
-    const count=Math.max(1,...currentGroups.map(g=>g.birds.length));
-    const lanes=Math.max(1,Math.ceil(count/Math.max(1,Math.floor((height+8)/12))),Math.ceil(Math.sqrt(count*width/height/2)));
-    const rows=Math.ceil(count/lanes);
-    return {lanes,rows,height:Math.max(4,Math.min(60,Math.floor((height-(rows-1)*8)/rows)))};
+    const pane = levelZoom && innerWidth <= 720 ? viewport.clientWidth : (viewport.clientWidth-28)/2;
+    const minimum = I.language() === "en" ? 104 : 78;
+    const lanes = Math.max(1,Math.min(levelZoom ? 6 : 20,Math.floor((pane+8)/(minimum+8))));
+    const width = (pane-(lanes-1)*8)/lanes;
+    const glyphHeight = shapesShown() ? Math.max(32,Math.min(levelZoom ? 96 : 44,width-10)) : levelZoom ? 38 : 24;
+    return {lanes,height:glyphHeight+32};
   }
   function capacityForFocus() {
     const width=Math.min(viewport.clientWidth,1380), count=activeMode==="compare" && innerWidth<=900 ? Math.min(2,currentGroups.length) : currentGroups.length;
@@ -113,10 +93,10 @@
   function planScope() {
     const width=Math.max(160,viewport.clientWidth-4), fit=innerWidth>=1000;
     const availableHeight=fit?viewport.clientHeight:Infinity;
-    const targetWidth=shapesShown()?76:172;
+    const targetWidth=shapesShown()?(I.language()==="en"?112:88):172;
     const targetHeight=shapesShown()?90:60;
-    const minimum=shapesShown()?52:80;
-    const minWidth=fit?Math.min(minimum,Math.max(64,Math.floor(width/14))):minimum;
+    const minimum=I.language()==="en"?104:78;
+    const minWidth=minimum;
     const counts=currentGroups.map(g=>g.birds.length), total=counts.reduce((s,n)=>s+n,0);
     let best=null;
     for(let rows=1;rows<=Math.max(...counts);rows++){
@@ -133,7 +113,7 @@
       const allRows=bandRows.reduce((s,n)=>s+n,0);
       const fixed=4+bands.length*64+(bands.length-1)*18+(allRows-bands.length)*8;
       const height=Math.min(targetHeight,(availableHeight-fixed)/allRows);
-      if(height<(shapesShown()?45:18))continue;
+      if(height<(shapesShown()?68:48))continue;
       let cost=0;
       bands.forEach(b=>{
         const tracks=b.reduce((s,i)=>s+laneCounts[i],0);
@@ -498,7 +478,7 @@
       if(scopedFamilies){
         if(scopePlan.key!==scopeSignature()){renderArrangement(activeMode);return;}
         fitBands();grid.style.setProperty("--tile-height",scopePlan.height+"px");
-        grid.dataset.labelled=String(scopePlan.height>=(shapesShown()?66:42));return;
+        grid.dataset.labelled="true";return;
       }
       if (ribbon) {
         const metrics=ribbonMetrics();
@@ -672,6 +652,7 @@
     grid.classList.toggle("focusGrid",focusedFamilies);
     grid.classList.toggle("scopeGrid",scopedFamilies);
     grid.classList.toggle("levelGrid",mode==="levels");
+    grid.classList.toggle("labelledGrid",["orders","families","levels"].includes(mode));
     grid.classList.toggle("ribbonGrid",ribbon);
     grid.classList.toggle("orderRibbon",mode==="orders");
     grid.classList.toggle("comparisonGrid",compare);
@@ -753,8 +734,7 @@
           const name=document.createElement("button");
           name.className="groupName"; name.type="button"; name.textContent=taxon(info.name);
           name.title=taxon(info.name);
-          name.onclick=()=>{if(activeMode==="levels")return;activeMode==="orders" ? enterOrder(info.name) : enterFamily(info);};
-          if(activeMode==="levels")name.disabled=true;
+          name.onclick=()=>{if(activeMode==="levels")window.AtlasExplorer.navigate("levels",info.level);else activeMode==="orders" ? enterOrder(info.name) : enterFamily(info);};
           count.textContent=species(group.length);
           heading.append(name);
         }
@@ -785,7 +765,12 @@
         if(compare && comparisonMode==="bird")window.AtlasComparisonDetails.enrich(section,group[0]);
         return section;
       });
-      visualBirds=orderBirds.flat(); renderIndex();
+      visualBirds=orderBirds.flat();
+      if(activeMode==="levels"){
+        const scopedIds=new Set(window.AtlasExplorer.pool(activeMode).map(b=>b.id));
+        visualBirds=visualBirds.filter(b=>scopedIds.has(b.id));
+      }
+      renderIndex();
     } else {
       focusedFamilies=false; visualBirds=window.AtlasExplorer.pool(activeMode).slice().sort((a,b)=>window.AtlasSort.compare(a,b,colorMode()));
       grid.replaceChildren(...visualBirds.map(b=>tiles.get(b.id)));
