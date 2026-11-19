@@ -1,0 +1,52 @@
+/* Supporting records stay quiet so the photographs and colour palettes lead. */
+#grid.birdComparison .comparisonLatin{height:auto;min-height:24px;line-height:1.5;white-space:normal;overflow:visible;font-style:italic}
+#grid.birdComparison .comparisonIdentityMeta{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;min-height:29px;padding:0 0 12px;color:var(--muted);font-size:11px;line-height:1.5}
+.comparisonBirdId{font-variant-numeric:tabular-nums}
+#grid.birdComparison .comparisonPhoto{height:260px;margin:0;display:grid;place-items:center;position:relative;overflow:hidden;background:var(--control)}
+#grid.birdComparison .comparisonPhoto img{width:100%;height:100%;max-height:260px;object-fit:contain;object-position:center}
+#grid.birdComparison .comparisonPhoto img[hidden]{display:none}
+.comparisonImageStatus{padding:24px;color:var(--muted);font-size:13px;text-align:center;line-height:1.7}
+.comparisonImageViews{display:flex;gap:4px;align-items:stretch;border-bottom:1px solid var(--rule);margin:0 0 22px}
+.comparisonImageViews button{flex:1;min-width:0;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;line-height:1.4;padding:11px 5px 10px;cursor:pointer}
+.comparisonImageViews button[aria-pressed="true"]{border-bottom-color:var(--ink);color:var(--ink);font-weight:600}
+.comparisonImageViews button:hover{color:var(--ink)}
+.comparisonImageViews button:disabled{opacity:.4;cursor:default}
+.comparisonImageViews button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
+#grid.birdComparison .comparisonPalette{border-top:0;padding-top:0;min-height:192px;align-content:start}
+.comparisonRecord{margin-top:24px;display:flex;flex-direction:column;gap:24px;min-width:0}
+.comparisonRecord>section{margin:0;padding:20px 0 0;border-top:1px solid var(--rule);min-width:0}
+.comparisonRecord h3{font-family:inherit;font-size:14px;font-weight:600;line-height:1.5;margin:0 0 9px;color:var(--ink)}
+.comparisonIntroduction p{font-size:13px;line-height:1.85;margin:0;color:var(--ink);max-width:72ch}
+.comparisonSourceText{margin:0;white-space:pre-line;overflow-wrap:anywhere;word-break:normal;color:var(--muted);font-size:12px;line-height:1.85;max-width:76ch}
+.comparisonSourceText a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.comparisonSourceText a:hover{color:var(--ink)}
+#grid.birdComparison .comparisonEcology{font-size:12px;line-height:1.7}
+#grid.birdComparison .comparisonEcology p{overflow-wrap:anywhere}
+@media(max-width:900px){
+  #grid.birdComparison .comparisonPhoto{height:220px}
+  #grid.birdComparison .comparisonPhoto img{max-height:220px}
+  .comparisonImageViews button{font-size:11px;padding-inline:3px}
+  .comparisonRecord{gap:20px;margin-top:22px}
+}
+
+/* The quantitative pie is primary; the existing graphic remains one click away. */
+#grid.birdComparison .comparisonPiePalette{grid-template-columns:minmax(130px,1fr) minmax(164px,1fr);gap:12px 22px}
+.comparisonChartTabs{grid-column:1/-1;display:flex;gap:0;align-items:center;border-bottom:1px solid var(--rule);margin:0 0 4px}
+.comparisonChartTabs button{flex:1;background:none;color:var(--muted);border:0;border-bottom:2px solid transparent;padding:9px 4px;font:inherit;font-size:11px;cursor:pointer;border-radius:0}
+.comparisonChartTabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+#grid.birdComparison .comparisonPiePalette .comparisonVisual{gap:10px;min-height:190px;justify-content:center}
+#grid.birdComparison .comparisonPiePalette .comparisonVisual .comparisonMainPie{display:block;width:175px;height:175px;max-width:100%;padding:0}
+#grid.birdComparison .comparisonPiePalette .comparisonVisual .comparisonMainPie[hidden],#grid.birdComparison .comparisonSecondaryVisual[hidden],#grid.birdComparison .comparisonChartReadout[hidden]{display:none}
+.comparisonChartReadout{font-size:10px;color:var(--muted);line-height:1.4;margin:0;text-align:center;min-height:14px;font-variant-numeric:tabular-nums}
+.comparisonSecondaryVisual{min-height:190px;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+#grid.birdComparison .comparisonSecondaryVisual .orderTiles{grid-template-rows:145px;max-width:160px}
+#grid.birdComparison .comparisonPiePalette .comparisonColour{cursor:pointer;padding:3px 0;outline-offset:4px;transition:opacity 130ms ease}
+#grid.birdComparison .comparisonPiePalette .comparisonColour.isDimmed{opacity:.28}
+#grid.birdComparison .comparisonPiePalette .comparisonColour.isActive .comparisonCode{color:var(--ink)}
+#grid.birdComparison .comparisonPiePalette .comparisonColour:focus-visible{outline:1px solid var(--ink)}
+.comparisonOpenDetail{grid-column:1/-1;width:max-content;max-width:100%;margin:4px 0 0;padding:0 0 4px;border:0;border-bottom:1px solid var(--rule);background:transparent;color:var(--muted);font:inherit;font-size:11px;cursor:pointer;border-radius:0}
+.comparisonOpenDetail:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.comparisonProvenance .birdSourcesGrid{display:grid;grid-template-columns:1fr;gap:16px}
+#grid.birdComparison .comparisonRecord .birdSourcesTitle{margin-bottom:15px}
+@media(max-width:900px){#grid.birdComparison .comparisonPiePalette{grid-template-columns:minmax(110px,.8fr) minmax(150px,1.2fr);gap:10px 12px}#grid.birdComparison .comparisonPiePalette .comparisonVisual .comparisonMainPie{width:150px;height:150px}.comparisonChartReadout{font-size:9px}}
+@media(prefers-reduced-motion:reduce){#grid.birdComparison .comparisonPiePalette .comparisonColour{transition:none}}

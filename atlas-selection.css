@@ -1,0 +1,13 @@
+/* A temporary selection step, above the bird atlas. */
+.catalog #pinned.comparisonPrompt{display:flex;flex:none;align-items:center;gap:16px;margin:12px 0 4px;padding:14px 18px;background:var(--control);border-left:3px solid var(--ink);color:var(--ink);font-size:13px}
+.catalog #pinned[hidden]{display:none}
+#comparisonAnchor{width:46px;height:46px;flex:none}
+#comparisonAnchor svg{width:100%;height:100%}
+.comparisonPromptText{display:flex;flex-direction:column;gap:5px;line-height:1.5;flex:1;min-width:0}
+.comparisonPromptText strong{font-size:15px;font-weight:650}
+.comparisonPromptText span{color:var(--muted)}
+.comparisonPromptActions{display:flex;gap:10px;flex-wrap:wrap}
+.comparisonPromptActions button{font:inherit;color:var(--ink);background:transparent;border:1px solid var(--rule);border-radius:3px;padding:8px 12px;cursor:pointer}
+.comparisonPromptActions button:hover{border-color:var(--ink)}
+#grid .tile.pinned::after{background:var(--ink);border-color:var(--bg);width:6px;height:6px;border-radius:50%}
+@media(max-width:640px){.catalog #pinned.comparisonPrompt{gap:10px;padding:12px;flex-wrap:wrap}.comparisonPromptActions{padding-left:56px}.comparisonPromptText strong{font-size:13px}.comparisonPromptText span{font-size:12px}}

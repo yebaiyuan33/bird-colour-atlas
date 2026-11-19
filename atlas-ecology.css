@@ -1,0 +1,59 @@
+/* Ecology stays secondary to the colour atlas. */
+#ecologyFilters{flex:none;min-width:0;display:flex;align-items:flex-start;gap:20px;padding:0;color:var(--muted);font-size:12px}
+.ecologyFilterPanel{flex:1;min-width:0}
+.ecologyFilterSummary{padding:9px 0;cursor:pointer;width:fit-content;max-width:100%;line-height:1.5}
+.ecologyFilterTitle{color:var(--muted)}
+.ecologyFilterSelected{display:inline;margin-left:12px;color:var(--ink);font-weight:600;overflow-wrap:anywhere}
+.ecologyFilterBody{display:flex;gap:12px 24px;flex-wrap:wrap;padding:4px 0 14px}
+.ecologyFilterField{display:flex;align-items:center;gap:9px;color:var(--ink);min-width:0}
+.ecologyFilterField select{max-width:100%;height:32px;font-size:12px;color:var(--ink);background:var(--control);border:1px solid var(--rule);border-radius:3px;padding:0 9px}
+.ecologyFilterField select:hover{border-color:var(--muted)}
+.ecologyFilterField select option{color:var(--ink);background:var(--bg)}
+.ecologyFilterScope{flex-basis:100%;max-width:98ch;margin:0;font-size:11px;line-height:1.6;color:var(--muted)}
+.ecologyFilterClear{flex:none;padding:9px 0;font-size:12px;line-height:1.5;color:var(--ink);text-decoration:underline;text-underline-offset:3px}
+.ecologyDetails{color:var(--ink);min-width:0;margin-top:22px;padding-top:20px;border-top:1px solid var(--rule);text-align:left}
+.ecologyDetails .ecologyTitle{font-family:inherit;font-size:14px;line-height:1.5;font-weight:600;letter-spacing:0;margin:0 0 14px;color:var(--ink)}
+.ecologyDetails h4{font-family:inherit;font-size:12px;font-weight:600;line-height:1.5;margin:0 0 7px;color:var(--ink)}
+.ecologyDetails h5{font-family:inherit;font-size:11px;font-weight:600;line-height:1.5;margin:0 0 4px;color:var(--ink)}
+.ecologyHabitats{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0}
+.ecologyHabitats li{padding:3px 8px;background:var(--control);color:var(--ink);font-size:12px;line-height:1.5;border-radius:3px}
+.ecologyDescription{font-size:12px;line-height:1.8;margin:8px 0 0;color:var(--muted);overflow-wrap:anywhere;max-width:75ch}
+.ecologyStatus{font-size:11px;line-height:1.7;margin:10px 0 0;color:var(--ink);padding-left:9px;border-left:2px solid var(--muted)}
+.ecologyProvinceBlock{margin-top:16px}
+.ecologyRecords{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 15px}
+.ecologyRecord{font-size:12px;line-height:1.65;color:var(--ink);min-width:0;max-width:100%;overflow-wrap:anywhere}
+.ecologyRecord.qualified{flex-basis:100%}
+.ecologyRecordNote{color:var(--muted);font-size:11px;line-height:1.7;margin:0;overflow-wrap:anywhere}
+.ecologyRecord .ecologyRecordNote::before{content:"（"}
+.ecologyRecord .ecologyRecordNote::after{content:"）"}
+.ecologyRecordContext{font-size:11px;line-height:1.7;color:var(--muted);margin:8px 0;max-width:75ch;overflow-wrap:anywhere}
+.ecologyScope{font-size:11px;line-height:1.6;margin:9px 0 0;color:var(--muted);max-width:85ch}
+.ecologyUnknown{font-size:12px;line-height:1.6;margin:0 0 3px;color:var(--ink)}
+.ecologyMore{margin-top:7px}
+.ecologyMore>summary{cursor:pointer;font-size:11px;line-height:1.6;color:var(--muted);width:fit-content}
+.ecologyMore[open] .ecologyRecords{margin-top:8px}
+.ecologyEvidence{margin-top:14px;font-size:11px;color:var(--muted)}
+.ecologyEvidence>summary{cursor:pointer;width:fit-content;line-height:1.7;text-decoration:underline;text-underline-offset:3px}
+.ecologyEvidenceBody{padding:0 0 3px}
+.ecologySourceGroup{margin-top:14px}
+.ecologySourceText{font-size:11px;line-height:1.8;white-space:pre-line;margin:0 0 6px;overflow-wrap:anywhere;color:var(--muted)}
+.ecologySourceText a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:640px){#ecologyFilters{gap:8px;flex-wrap:wrap}.ecologyFilterClear{padding:0 0 7px}.ecologyFilterSelected{display:block;margin:3px 0 0 13px}.ecologyFilterBody{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}.ecologyFilterField{display:grid;grid-template-columns:90px minmax(0,1fr);gap:7px}.ecologyFilterField select{width:100%;min-width:0}.ecologyFilterScope{font-size:11px}.ecologyDetails{margin-top:18px;padding-top:17px}}
+
+/* Compact ecological facts; all provenance is grouped in a separate source area. */
+.ecologyDetails .ecologyTitle{font-size:14px;margin:0 0 14px}
+.ecologyDetails .ecologyHabitatBlock,.ecologyDetails .ecologyProvinceBlock{margin:0 0 16px}
+.ecologyDetails .ecologyProvinceBlock:last-child{margin-bottom:0}
+.ecologyDetails h4{font-size:11px;font-weight:500;color:var(--muted);margin:0 0 8px}
+.ecologyDetails .ecologyDescription{font-size:12px;line-height:1.75;color:var(--muted);margin:8px 0 0}
+.ecologyDetails .ecologyRecords{gap:5px 13px}
+.birdSources{min-width:0;color:var(--ink)}
+.birdSources .birdSourcesTitle{font-size:14px;font-weight:600;margin:0 0 18px}
+.birdSourcesGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:26px}
+.birdSourceGroup{min-width:0}
+.birdSourceGroup h4{font-family:inherit;font-size:11px;font-weight:600;margin:0 0 9px;color:var(--ink)}
+.birdSourceGroup .ecologySourceText{font-size:11px;line-height:1.8;color:var(--muted);margin:0 0 8px;white-space:pre-line;overflow-wrap:anywhere;word-break:normal}
+.birdSourceGroup a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.birdSourceGroup a:hover{color:var(--ink)}
+.birdSources.compact .birdSourcesGrid{grid-template-columns:1fr;gap:15px}
+@media(max-width:799px){.birdSourcesGrid{grid-template-columns:1fr;gap:18px}.birdSourceGroup .ecologySourceText{font-size:12px}}

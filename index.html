@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <title>Discovering the Colours of China’s Nationally Protected Wild Birds</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="specimen.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-theme.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-comparison.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-ecology.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-comparison-details.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-selection.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-pie.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-explorer.css?v=20261119-smooth">
+  <link rel="stylesheet" href="atlas-category-overviews.css?v=20261119-smooth">
+</head>
+<body>
+  <a class="skip" data-i18n="skip" href="#grid">跳到色格</a>
+  <main aria-label="中国国家重点保护野生鸟类颜色发现">
+    <header class="masthead">
+      <div class="mastheadTitle"><h1><button id="homeTitle" type="button" data-i18n-label="resetAtlas">Discovering the Colours of China’s Nationally Protected Wild Birds</button></h1><p>中国国家重点保护野生鸟类颜色发现</p></div>
+      <div class="mastheadAside"><span id="atlasStats"></span><label class="themeControl"><select id="themeSwitch" data-i18n-label="background"><option value="dark" data-i18n="darkBackground">深色</option><option value="light" data-i18n="whiteBackground">白色</option></select></label><div class="languageSwitch" role="group" aria-label="Language / 语言"><button id="langZh" type="button" lang="zh-CN">中文</button><button id="langEn" type="button" lang="en">EN</button></div></div>
+    </header>
+    <section class="filters" aria-label="Bird filters">
+      <div class="taxControls">
+        <label class="search">
+          <svg aria-hidden="true" viewBox="0 0 20 20"><circle cx="8" cy="8" r="5.5"/><path d="m12.5 12.5 4.5 4.5"/></svg>
+          <input type="search" id="search" data-i18n-label="searchLabel" data-i18n-placeholder="search"><kbd>/</kbd>
+        </label>
+        <div class="plotOrder"><select id="arrangement" data-i18n-label="arrangement"><option value="catalog" selected data-i18n="catalogView">全部鸟类</option><option value="orders" data-i18n="orderView">按目浏览</option><option value="families" data-i18n="familyView">按科浏览</option><option value="levels" data-i18n="levelView">按等级预览</option><option value="habitats" data-i18n="habitatView">按生存环境浏览</option><option value="provinces" data-i18n="provinceView">按省份浏览</option></select></div>
+        <select id="order" data-i18n-label="orderFilter"><option value="" data-i18n="allOrders">全部目</option></select>
+        <select id="family" data-i18n-label="familyFilter"><option value="" data-i18n="allFamilies">全部科</option></select>
+      </div>
+      <div class="viewControls">
+        <select id="levelFilter" data-i18n-label="levelFilter"><option value="" data-i18n="allLevels">全部等级</option><option value="一级" data-i18n="classI">国家一级保护</option><option value="二级" data-i18n="classII">国家二级保护</option></select>
+        <label id="sortField" class="toolbarSelect"><span class="srOnly" data-i18n="colourOrder">色彩排序</span><select id="colorSort"><option value="light" selected data-i18n="light">明 → 暗</option><option value="hue" data-i18n="hue">色相渐变</option><option value="warm" data-i18n="warm">暖 → 冷</option><option value="chroma" data-i18n="chroma">低 → 高彩度</option></select></label>
+        <select id="hueFilter" data-i18n-label="colourFilter"><option value="" data-i18n="allColours">全部颜色</option><option value="0" data-i18n="red">红橙</option><option value="1" data-i18n="yellow">黄</option><option value="2" data-i18n="green">绿</option><option value="3" data-i18n="cyan">青</option><option value="4" data-i18n="blue">蓝</option><option value="5" data-i18n="purple">紫</option><option value="6" data-i18n="neutral">近中性</option></select>
+        <div id="levelViews" class="levelViews" role="group" data-i18n-label="levelDisplay" hidden>
+          <button type="button" data-zoom="overview" aria-pressed="true" data-i18n="levelOverview">全局</button>
+          <button type="button" data-zoom="large" aria-pressed="false" data-i18n="levelLarge">放大</button>
+        </div>
+        <label class="displayControl"><select id="displaySwitch" data-i18n-label="display"><option value="tiles" data-i18n="colourTiles">色块</option><option value="wings" selected data-i18n="fiveWings">羽翼色谱</option><option value="mosaic" data-i18n="areaMosaic">色彩占比图</option><option value="pie" data-i18n="colourPie">色彩饼图</option></select></label>
+        <button id="openComparison" aria-controls="comparisonModes" type="button" class="compareEntry" data-i18n="compare">对比</button>
+      </div>
+        <div class="matchTools" id="matchTools" hidden><span id="matchCount" class="srOnly" aria-live="polite"></span><button id="locate" type="button" data-i18n="locate" hidden>定位匹配</button><button id="clear" type="button" data-i18n="clear" hidden>清除筛选</button></div>
+    </section>
+    <div id="ecologyFilters"></div>
+    <section aria-label="Bird colour atlas" class="catalog">
+      <div id="pinned" class="comparisonPrompt" hidden><div id="comparisonAnchor" aria-hidden="true"></div><div class="comparisonPromptText" role="status" aria-live="polite"><strong id="comparisonPromptTitle"></strong><span id="comparisonPromptHint"></span></div><div class="comparisonPromptActions"><button id="chooseFromAll" type="button" data-i18n="browseAllBirds">浏览全部鸟类</button><button id="cancelComparison" type="button" data-i18n="cancelSelection">取消对照</button></div></div>
+      <div class="plotInfo" hidden>
+        <fieldset id="familyOrderField" class="familyOrderField" hidden><legend class="srOnly" data-i18n="familyOrdering">各科排列方式</legend><div class="familyOrderChoices"><label><input type="radio" name="familyOrder" value="count"><span data-i18n="countOrder">数量排列</span></label><label><input type="radio" name="familyOrder" value="taxonomy" checked><span data-i18n="taxonomyOrder">按目归组</span></label></div></fieldset>
+      <nav id="ribbonNav" data-i18n-label="scroll" class="ribbonNav" aria-label="横向浏览各科" hidden>
+        <select id="ribbonJump" aria-label="跳转至指定分类"></select>
+        <button id="ribbonPrevious" data-i18n-label="scrollPrevious" type="button" aria-label="向前浏览">‹</button>
+        <input id="ribbonRange" data-i18n-label="scrollPosition" type="range" min="0" max="1000" value="0" aria-label="横向浏览位置">
+        <button id="ribbonNext" data-i18n-label="scrollNext" type="button" aria-label="向后浏览">›</button>
+        <span id="ribbonPosition"></span>
+      </nav>
+      </div>
+      <div id="contextLine" class="contextLine" hidden>
+        <div class="contextPath"><button id="backOverview" data-i18n="overview" type="button">← 全部鸟目</button><h2 id="contextTitle"></h2><span id="contextCount"></span></div>
+        <div id="comparisonModes" role="group" data-i18n-label="comparisonModes" hidden>
+          <button type="button" data-compare="bird" data-i18n="compareBird">鸟种对照</button>
+          <button type="button" data-compare="family" data-i18n="compareFamily">科间对照</button>
+          <button type="button" data-compare="order" data-i18n="compareOrder">鸟目对照</button>
+        </div>
+        <button id="editComparison" type="button" aria-haspopup="dialog" hidden>选择对象</button>
+      </div>
+      <details class="mobileOrders" id="mobileOrders">
+        <summary>鸟目索引（23）</summary><nav id="orderIndex" data-i18n-label="indexOrders" aria-label="跳转至鸟目"></nav>
+      </details>
+      <div class="plot">
+        <div class="gridViewport" data-i18n-label="paletteRegion" tabindex="0" role="region" aria-label="鸟种色格，可滚动浏览">
+          <div id="grid" data-i18n-label="keyboard" class="catalogGrid" data-display="wings" data-density="normal" tabindex="-1" role="group" aria-label="方向键移动，回车打开鸟种详情"></div>
+        </div>
+        <div id="empty" hidden><strong data-i18n="empty">没有匹配的鸟种</strong><button id="clearEmpty" data-i18n="clear" type="button">清除筛选</button></div>
+      </div>
+
+    </section>
+  </main>
+  <div id="tip" role="tooltip" hidden></div>
+  <dialog id="detailDialog" data-i18n-label="detail" aria-label="鸟种详情"><div class="detailFrame">
+    <div class="detailNav"><button id="closeDetail" data-i18n="return" type="button" autofocus>← 返回总览</button><div>
+      <button id="previous" data-i18n-label="previous" type="button" aria-label="上一种">‹</button><button id="next" data-i18n-label="next" type="button" aria-label="下一种">›</button>
+    </div></div><section id="specimen"></section>
+  </div></dialog>
+  <dialog id="comparisonPicker" aria-labelledby="pickerTitle">
+    <form id="comparisonForm">
+      <header class="pickerHeader"><div><h2 id="pickerTitle">选择对象</h2><p data-i18n="pickerHint">选择 2–4 个对象。</p></div><button id="closePicker" data-i18n-label="pickerClose" type="button" aria-label="关闭选择面板">×</button></header>
+      <input id="pickerSearch" type="search" placeholder="搜索" aria-label="搜索">
+      <div id="pickerChosen" class="pickerChosen" aria-live="polite"></div>
+      <div id="pickerList" class="pickerList"></div><p id="pickerEmpty" data-i18n="pickerEmpty" hidden>没有匹配的对象</p>
+      <footer class="pickerFooter"><span id="pickerCount" aria-live="polite"></span><button type="submit" id="applyComparison" disabled>开始对照</button></footer>
+    </form>
+  </dialog>
+  <script src="atlas-i18n.js?v=20261119-smooth"></script>
+  <script src="atlas-data.js?v=20261119-smooth"></script>
+  <script src="atlas-sort.js?v=20261119-smooth"></script>
+  <script src="bird-intros.js?v=20261119-smooth"></script>
+  <script src="atlas-ecology-data.js?v=20261119-smooth"></script>
+  <script src="atlas-analysis.js?v=20261119-smooth"></script>
+  <script src="atlas-wings.js?v=20261119-smooth"></script>
+  <script src="atlas-pie.js?v=20261119-smooth"></script>
+  <script src="atlas-ecology.js?v=20261119-smooth"></script>
+  <script src="atlas-comparison-details.js?v=20261119-smooth"></script>
+  <script src="specimen.js?v=20261119-smooth"></script>
+  <script src="atlas-category-overviews.js?v=20261119-smooth"></script>
+  <script src="atlas-explorer.js?v=20261119-smooth"></script>
+  <script src="atlas-theme.js?v=20261119-smooth"></script>
+  <script src="atlas.js?v=20261119-smooth"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+/* Distinct reading structures for taxonomy, protection, environment and geography. */
+.coOverview{--co-ink:var(--ink);font-size:14px;line-height:1.7;color:var(--ink);padding-top:36px}
+.coOverview *{box-sizing:border-box}
+.coHeader{max-width:890px;margin-bottom:24px}
+.coHeader h2{font-size:clamp(27px,2.6vw,41px);font-weight:600;line-height:1.25;letter-spacing:-.7px;margin:0 0 15px}
+.coHeader p{font-size:15px;line-height:1.9;color:var(--muted);margin:0;max-width:800px}
+.coSection{margin:32px 0 0;padding:27px 0 12px;border-top:1px solid var(--rule)}
+.coSectionHead{margin:0 0 22px}
+.coSection h3{font-size:20px;line-height:1.4;margin:0 0 8px;font-weight:500}
+.coSectionHead p,.coNote{font-size:12px;color:var(--muted);line-height:1.8;margin:8px 0 0}
+.coLink{font:inherit;text-align:left;color:var(--ink);border:0;background:transparent;padding:3px 0;cursor:pointer;line-height:1.4}
+.coLink:hover{text-decoration:underline;text-underline-offset:4px}
+.coInsight{font-size:17px;line-height:1.9;max-width:1000px;margin:12px 0 28px}
+.coOrderLead{display:grid;grid-template-columns:240px 1fr;align-items:center;gap:50px;margin:35px 0}
+.coLeadNumber{display:flex;align-items:center;gap:16px;margin:0}
+.coLeadNumber strong{font-size:64px;line-height:1;font-weight:400;letter-spacing:-2px}
+.coLeadNumber span{max-width:120px;font-size:13px;color:var(--muted);line-height:1.7}
+.coOrderLead .coInsight{margin:0;font-size:18px}
+.coOrderRow,.coOrderColumns{display:grid;grid-template-columns:minmax(180px,1.2fr) minmax(130px,1fr) 65px minmax(160px,1.2fr);gap:26px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+.coOrderColumns{font-size:11px;color:var(--muted);padding-bottom:14px}
+.coCountCell{display:grid;grid-template-columns:1fr 30px;align-items:center;gap:13px}
+.coTrack{height:8px;background:var(--control);overflow:hidden}
+.coTrack>span{display:block;height:100%;background:var(--ex-accent)}
+.coValue,.coFamilyCount{font-size:12px;font-variant-numeric:tabular-nums}
+.coFamilyCount{color:var(--muted)}
+.coSpectrum{display:flex;height:15px;width:100%;overflow:hidden;box-shadow:inset 0 0 0 1px #8882}
+.coSpectrum>span{display:block;height:100%;flex:none}
+.coLegend{display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap;margin:22px 0 12px;font-size:11px;color:var(--muted)}
+.coLegend>span{display:flex;align-items:center;gap:7px}
+.coLegend i{width:9px;height:9px;display:block}
+.coFamilyLead .coInsight{font-size:16px}
+.coScatterWrap{max-width:1100px}
+.coScatter{width:100%;height:auto;max-height:430px;overflow:visible}
+.coChartGrid{stroke:var(--rule);stroke-width:1}
+.coAxis{font-size:11px;fill:var(--muted);font-family:inherit}
+.coDot{stroke:var(--bg);stroke-width:1.2;cursor:pointer;fill-opacity:.85}
+.coDot:hover,.coDot:focus{stroke:var(--ink);stroke-width:2;fill-opacity:1;outline:none}
+.coScatterReadout{font-size:12px;color:var(--muted);min-height:22px;margin:12px 0 0}
+.coFamilyDirectory{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 48px}
+.coFamilyBand{display:grid;grid-template-columns:140px minmax(0,1fr);gap:18px;align-content:start}
+.coFamilyBand h4{font-size:14px;font-weight:500;color:var(--muted);margin:6px 0}
+.coFamilyList{display:flex;flex-direction:column}
+.coFamilyItem{font:inherit;color:var(--ink);border:0;border-top:1px solid var(--rule);background:none;padding:10px 0 14px;text-align:left;cursor:pointer}
+.coFamilyItem:hover .coFamilyTitle>span{text-decoration:underline;text-underline-offset:3px}
+.coFamilyTitle{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:7px;font-size:12px;line-height:1.5}
+.coFamilyTitle strong{font-weight:400;font-variant-numeric:tabular-nums;color:var(--muted)}
+.coFamilyItem .coSpectrum{height:7px}
+.coDefinition{max-width:1020px;font-size:13px;color:var(--muted);line-height:1.9;margin:20px 0 32px}
+.coLevelProfiles{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin:30px 0 0}
+.coLevelProfile{border-top:2px solid var(--ex-accent);padding-top:20px;min-width:0}
+.coLevelTitle,.coHabitatTitle{font:inherit;color:var(--ink);padding:0;border:0;background:none;text-align:left;cursor:pointer;font-size:25px;line-height:1.5;font-weight:500}
+.coLevelTitle:hover,.coHabitatTitle:hover{text-decoration:underline;text-underline-offset:5px}
+.coLevelNumber{display:flex;align-items:baseline;gap:16px;margin:16px 0 18px}
+.coLevelNumber strong{font-size:58px;font-weight:400;line-height:1.1;letter-spacing:-1.7px}
+.coLevelNumber>span{font-size:12px;color:var(--muted)}
+.coLevelTaxa{color:var(--muted);font-size:12px;margin:12px 0 30px}
+.coLevelProfile h4{font-size:14px;margin:26px 0 15px;font-weight:600}
+.coLevelProfile>.coSpectrum{height:45px}
+.coHabitats{display:flex;flex-direction:column;gap:12px}
+.coHabitatBar{display:grid;grid-template-columns:minmax(100px,1.3fr) minmax(50px,1fr) 90px;align-items:center;gap:14px;font-size:11px;line-height:1.5}
+.coHabitatBar>.coTrack{height:5px}
+.coHabitatBar>.coValue{text-align:right;font-size:11px;color:var(--muted)}
+.coReferences{display:flex;flex-wrap:wrap;gap:20px;font-size:12px;margin-top:24px}
+.coReferences a{color:var(--muted);text-underline-offset:4px}
+.coHabitatProfiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px 36px;margin:28px 0}
+.coHabitatProfile{border-top:1px solid var(--rule);padding-top:20px;position:relative;min-width:0}
+.coHabitatTitle{font-size:19px;padding-right:65px;min-height:58px;display:block}
+.coHabitatNumber{position:absolute;right:0;top:24px;font-size:12px;color:var(--muted)}
+.coHabitatDefinition{font-size:13px;line-height:1.85;color:var(--muted);margin:9px 0 20px;min-height:98px}
+.coHabitatProfile>.coSpectrum{height:25px}
+.coTableScroll{max-width:100%;overflow-x:auto}
+.coOverlap{width:100%;border-collapse:separate;border-spacing:4px;font-size:12px;min-width:700px}
+.coOverlap th{font-weight:400;color:var(--muted);padding:12px 8px;line-height:1.5;text-align:center}
+.coOverlap th:first-child{text-align:left;width:170px}
+.coOverlap td{height:58px;text-align:center;font-size:17px;position:relative;background:color-mix(in srgb,var(--ex-accent) calc(var(--co-density)*100%),var(--bg))}
+.coCoverage{display:flex;gap:45px;flex-wrap:wrap;margin:30px 0 22px}
+.coCoverage p{display:flex;align-items:baseline;gap:10px;margin:0}
+.coCoverage strong{font-size:34px;line-height:1.2;letter-spacing:-.5px;font-weight:400;font-variant-numeric:tabular-nums}
+.coCoverage span{font-size:11px;color:var(--muted)}
+.coProvinceKey{display:flex;gap:22px;font-size:11px;color:var(--muted);margin:0 0 12px}
+.coProvinceKey>span{display:flex;gap:7px;align-items:center}
+.coProvinceKey>span:before{content:'';width:10px;height:10px;background:var(--ex-accent)}
+.coProvinceKey>.coClassTwo:before{background:color-mix(in srgb,var(--ex-accent) 35%,var(--bg))}
+.coProvinceRow{display:grid;grid-template-columns:minmax(130px,.9fr) minmax(180px,1.6fr) 110px minmax(140px,1fr);gap:24px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+.coProvinceCount{display:grid;grid-template-columns:1fr 30px;gap:13px;align-items:center}
+.coProvinceCount strong{font-size:12px;font-weight:400;font-variant-numeric:tabular-nums}
+.coProvinceBar{display:flex;height:11px;background:var(--control)}
+.coProtection0{background:var(--ex-accent)}
+.coProtection1{background:color-mix(in srgb,var(--ex-accent) 35%,var(--bg))}
+.coProvinceMeta{font-size:11px;color:var(--muted)}
+@media(max-width:1050px){.coFamilyDirectory{grid-template-columns:1fr}.coFamilyBand{grid-template-columns:180px 1fr}.coFamilyList{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}.coOrderRow,.coOrderColumns{grid-template-columns:minmax(150px,1.2fr) minmax(100px,1fr) 50px minmax(120px,1fr);gap:18px}.coLevelProfiles{gap:32px}.coHabitatProfiles{grid-template-columns:1fr 1fr}.coHabitatDefinition{min-height:84px}.coProvinceRow{grid-template-columns:minmax(100px,.9fr) minmax(120px,1.3fr) 90px minmax(120px,1fr);gap:16px}.coCoverage{gap:25px}}
+@media(max-width:650px){.coOverview{padding-top:25px}.coHeader h2{font-size:27px}.coHeader p{font-size:13px}.coOrderLead{grid-template-columns:1fr;gap:22px}.coLeadNumber strong{font-size:50px}.coLeadNumber span{max-width:none}.coOrderLead .coInsight,.coInsight{font-size:15px}.coSection{padding-top:23px;margin-top:26px}.coSection h3{font-size:18px}.coOrderRow,.coOrderColumns{grid-template-columns:minmax(110px,1fr) minmax(90px,1fr) 35px;gap:10px}.coOrderColumns>span:last-child{display:none}.coOrderRow>.coSpectrum{grid-column:1/-1;height:8px;margin:0 0 5px}.coOrderRow>.coLink{font-size:12px}.coFamilyBand{grid-template-columns:1fr;gap:5px}.coFamilyList{grid-template-columns:1fr 1fr;gap:0 18px}.coFamilyTitle{font-size:11px}.coLevelProfiles{grid-template-columns:1fr;gap:36px}.coLevelNumber strong{font-size:48px}.coHabitatProfiles{grid-template-columns:1fr;gap:24px}.coHabitatTitle{min-height:0;font-size:21px}.coHabitatDefinition{min-height:0;margin-top:14px}.coHabitatProfile>.coSpectrum{height:25px}.coCoverage{display:grid;grid-template-columns:1fr 1fr;gap:20px}.coCoverage p{display:block}.coCoverage strong,.coCoverage span{display:block}.coCoverage span{margin-top:4px}.coCoverage strong{font-size:30px}.coProvinceRow{grid-template-columns:minmax(100px,1fr) minmax(100px,1.3fr);gap:7px 16px}.coProvinceMeta{font-size:10px}.coProvinceRow>.coSpectrum{height:8px}.coProvinceRow>.coLink{font-size:12px}.coLegend{gap:10px 16px}.coAxis{font-size:12px}}

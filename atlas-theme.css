@@ -1,0 +1,50 @@
+
+/* Neutral backgrounds keep photograph-derived colours unchanged. */
+.themeControl{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted);white-space:nowrap}
+.themeControl select{height:30px;padding:0 7px;background:var(--control);color:var(--ink);border:1px solid var(--rule);border-radius:3px}
+.mastheadAside{gap:16px;flex-wrap:wrap;justify-content:flex-end}
+#specimen .sp-provenance{margin-top:20px;padding-top:0;border-top:0}
+#specimen .sp-provenance h3{margin:0 0 8px;font-family:inherit;font-weight:600;font-size:13px;line-height:1.5;color:var(--sp-paper)}
+#specimen .sp-source-text{margin:0;white-space:pre-line;overflow-wrap:anywhere;line-height:1.85;font-size:12px;color:var(--sp-muted)}
+#specimen .sp-source-text a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+#specimen .sp-views{margin-bottom:0}
+#specimen .sp-actions{margin-top:24px}
+#specimen .sp-glyphs{margin-top:22px}
+#specimen .sp-glyphs svg{width:120px;height:120px}
+@media(min-width:800px){#specimen .sp-content{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);column-gap:32px}}
+@media(max-width:799px){#specimen .sp-media{display:contents}#specimen .sp-content{display:flex;flex-direction:column}#specimen .sp-identity{order:0}#specimen .sp-photo{order:1}#specimen .sp-views{order:2}#specimen .sp-notes{order:3}#specimen .sp-provenance{order:4;border-top:1px solid var(--sp-rule);padding-top:18px}}
+:root[data-theme="light"]{color-scheme:light;--bg:#ffffff;--ink:#202823;--muted:#5c6861;--rule:#d9dedb;--control:#f5f7f5}
+[data-theme="light"] :where(button,a,select,input,summary):focus-visible{outline-color:#344f40}
+[data-theme="light"] .search svg{stroke:var(--muted)}
+[data-theme="light"] .search input::placeholder{color:var(--muted)}
+[data-theme="light"] .search:focus-within{border-color:var(--ink)}
+[data-theme="light"] .filters select option{background:#fff;color:var(--ink)}
+[data-theme="light"] .filters select,[data-theme="light"] .filters .compareEntry{border-color:#c9d1cb}
+[data-theme="light"] .mastheadTitle p,[data-theme="light"] .languageSwitch button,[data-theme="light"] .clusterLabel,[data-theme="light"] .comparisonLatin,[data-theme="light"] .tileName,[data-theme="light"] #backOverview,[data-theme="light"] .ribbonNav button,[data-theme="light"] #pinned{color:var(--muted)}
+[data-theme="light"] .languageSwitch button[aria-pressed=true],[data-theme="light"] .familyOrderChoices input:checked+span,[data-theme="light"] #comparisonModes button[aria-pressed=true]{background:#e5ece7;color:var(--ink)}
+[data-theme="light"] #homeTitle:hover,[data-theme="light"] #backOverview:hover{color:#111}
+[data-theme="light"] dialog,[data-theme="light"] #detailDialog,[data-theme="light"] #empty{background:#fff;color:var(--ink);border-color:#c9d1cb}
+[data-theme="light"] dialog::backdrop{background:#1b292066}
+[data-theme="light"] .detailNav button{color:var(--ink)}
+[data-theme="light"] .comparisonPhoto{background:#f1f4f1}
+[data-theme="light"] .gridViewport,[data-theme="light"] #grid.zoomLevels .orderTiles,[data-theme="light"] .pickerList{scrollbar-color:#a0aca3 #f3f5f3;border-color:var(--rule)}
+[data-theme="light"] #specimen{--sp-paper:#202823;--sp-muted:#5c6861;--sp-rule:#d9dedb}
+[data-theme="light"] #specimen .sp-photo{background:#f1f4f1}
+[data-theme="light"] #specimen .sp-latin,[data-theme="light"] #specimen .sp-hex,[data-theme="light"] #specimen .sp-share,[data-theme="light"] #specimen .sp-compare{color:var(--ink)}
+[data-theme="light"] #specimen .sp-views button:hover,[data-theme="light"] #specimen .sp-views button[aria-pressed=true],[data-theme="light"] #specimen .sp-pin:hover{color:#14251a}
+[data-theme="light"] #specimen .sp-ink{box-shadow:inset 0 0 0 1px #00000018}
+[data-theme="light"] #specimen .sp-chip[aria-pressed=true] .sp-hex{color:var(--ink)}
+[data-theme="light"] #specimen button:focus-visible{outline-color:var(--ink)}
+[data-theme="light"] #specimen .sp-chip:hover .sp-ink{outline-color:#273d2e}
+[data-theme="light"] #specimen .sp-glyphs figcaption{color:var(--muted)}
+[data-theme="light"] .tile:enabled:hover,[data-theme="light"] .tile:focus-visible{outline-color:var(--ink)}
+[data-theme="light"] #grid:is([data-display="wings"],[data-display="mosaic"],[data-display="pie"]) .tile:enabled:hover .wingGlyph,[data-theme="light"] #grid:is([data-display="wings"],[data-display="mosaic"],[data-display="pie"]) .tile:focus-visible .wingGlyph{filter:drop-shadow(0 0 1px #344f40)}
+[data-theme="light"] #editComparison,[data-theme="light"] #comparisonModes button{color:var(--ink);border-color:var(--rule)}
+[data-theme="light"] .compareEntry:hover,[data-theme="light"] #editComparison:hover{background:#edf2ee}
+[data-theme="light"] #pickerSearch,[data-theme="light"] .pickerList label{background:#f5f7f5;border-color:#d3dbd5}
+[data-theme="light"] .pickerChosen button,[data-theme="light"] .pickerList label:has(input:checked){background:#e2eee5;color:var(--ink)}
+[data-theme="light"] .pickerHeader p,[data-theme="light"] .pickerList legend,[data-theme="light"] .pickerList small,[data-theme="light"] #pickerCount{color:var(--muted)}
+[data-theme="light"] #applyComparison{background:#294b35;color:#fff}
+@media(max-width:730px){.mastheadAside{gap:8px}.themeControl{margin-left:auto}.mastheadAside #atlasStats{margin-right:auto}}
+
+[data-theme="light"] #specimen .sp-intro p{color:#37443b}
